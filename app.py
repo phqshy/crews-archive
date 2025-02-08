@@ -12,6 +12,5 @@ app.register_blueprint(base_blueprint)
 
 @app.route('/')
 def hello_world():  # put application's code here
-    print(app.url_map)
-    return "hi"
+    return app.url_map
 
