@@ -11,10 +11,8 @@ rmb = Blueprint("rmb", __name__, url_prefix="/rmb")
 postgres_url = os.environ['POSTGRES_URL']
 postgres_username = os.environ['POSTGRES_USERNAME']
 postgres_password_file = os.environ['POSTGRES_PASSWORD']
-print(postgres_password_file)
 with open(postgres_password_file) as f:
     postgres_password = f.readline()
-    print(postgres_password)
 postgres_database = os.environ['POSTGRES_DATABASE']
 
 
