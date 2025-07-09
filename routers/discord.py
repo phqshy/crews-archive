@@ -15,48 +15,48 @@ router = APIRouter(
 
 def parse_channel(channel_tuple):
     return {
-        'id': channel_tuple[0],
+        'id': channel_tuple[4],
         'category_id': channel_tuple[1],
         'category': channel_tuple[2],
-        'name': channel_tuple[3],
-        'topic': channel_tuple[4],
-        'type': channel_tuple[5],
+        'name': channel_tuple[0],
+        'topic': channel_tuple[5],
+        'type': channel_tuple[3],
     }
 
 
 def parse_user(user_tuple):
     return {
-        'id': user_tuple[0],
-        'name': user_tuple[1],
+        'id': user_tuple[4],
+        'name': user_tuple[5],
         'discriminator': user_tuple[2],
-        'nickname': user_tuple[3],
-        'is_bot': user_tuple[4],
-        'avatar_url': user_tuple[5],
+        'nickname': user_tuple[0],
+        'is_bot': user_tuple[1],
+        'avatar_url': user_tuple[3],
     }
 
 
 def parse_emoji(emoji_tuple):
     return {
-        'id': emoji_tuple[0],
-        'name': emoji_tuple[1],
-        'code': emoji_tuple[2],
-        'image_url': emoji_tuple[3],
+        'id': emoji_tuple[1],
+        'name': emoji_tuple[2],
+        'code': emoji_tuple[3],
+        'image_url': emoji_tuple[0],
     }
 
 
 def parse_message(message_tuple):
     return {
-        'id': message_tuple[0],
-        'channel_id': message_tuple[1],
-        'author_id': message_tuple[2],
-        'type': message_tuple[3],
-        'timestamp': message_tuple[4],
-        'timestamp_edited': message_tuple[5],
-        'is_pinned': message_tuple[6],
-        'content': message_tuple[7],
-        'reference_message': message_tuple[8],
-        'embeds': message_tuple[9][0] if message_tuple[9] is not None else [],
-        # 'ts': message_tuple[10],
+        'id': message_tuple[4],
+        'channel_id': message_tuple[6],
+        'author_id': message_tuple[7],
+        'type': message_tuple[0],
+        'timestamp': message_tuple[5],
+        'timestamp_edited': message_tuple[2],
+        'is_pinned': message_tuple[3],
+        'content': message_tuple[10],
+        'reference_message': message_tuple[9],
+        'embeds': message_tuple[8][0] if message_tuple[8] is not None else [],
+        # 'ts': message_tuple[1],
         'mentioned_users': message_tuple[11] if message_tuple[11][0] is not None else [],
         'reactions': message_tuple[12] if message_tuple[12][0]['reaction_id'] is not None else []
     }
