@@ -24,6 +24,18 @@ def parse_channel(channel_tuple):
     }
 
 
+# DEVELOPMENT
+"""def parse_channel(channel_tuple):
+    return {
+        'id': str(channel_tuple[0]),
+        'category_id': str(channel_tuple[1]),
+        'category': channel_tuple[2],
+        'name': channel_tuple[3],
+        'topic': channel_tuple[4],
+        'type': channel_tuple[5],
+    }"""
+
+
 def parse_user(user_tuple):
     return {
         'id': user_tuple[4],
@@ -35,6 +47,18 @@ def parse_user(user_tuple):
     }
 
 
+# DEVELOPMENT
+"""def parse_user(user_tuple):
+    return {
+        'id': str(user_tuple[0]),
+        'name': user_tuple[1],
+        'discriminator': user_tuple[2],
+        'nickname': user_tuple[3],
+        'is_bot': user_tuple[4],
+        'avatar_url': user_tuple[5],
+    }"""
+
+
 def parse_emoji(emoji_tuple):
     return {
         'id': emoji_tuple[1],
@@ -44,7 +68,28 @@ def parse_emoji(emoji_tuple):
     }
 
 
+# DEVELOPMENT
+"""def parse_message(message_tuple):
+    return {
+        'id': str(message_tuple[0]),
+        'channel_id': str(message_tuple[1]),
+        'author_id': str(message_tuple[2]),
+        'type': message_tuple[3],
+        'timestamp': message_tuple[4],
+        'timestamp_edited': message_tuple[5],
+        'is_pinned': message_tuple[6],
+        'content': message_tuple[7],
+        'reference_message': str(message_tuple[8]),
+        'embeds': message_tuple[9][0] if message_tuple[9] is not None else [],
+        # 'ts': message_tuple[10],
+        'mentioned_users': message_tuple[11] if message_tuple[11][0] is not None else [],
+        'reactions': message_tuple[12] if message_tuple[12][0]['reaction_id'] is not None else []
+    }"""
+
+
 def parse_message(message_tuple):
+    print(message_tuple)
+
     return {
         'id': message_tuple[4],
         'channel_id': message_tuple[6],
@@ -67,8 +112,8 @@ class ErrorMessage(BaseModel):
 
 
 class Channel(BaseModel):
-    id: int
-    category_id: int | None
+    id: str
+    category_id: str | None
     category: str | None
     name: str
     topic: str | None
@@ -76,7 +121,7 @@ class Channel(BaseModel):
 
 
 class User(BaseModel):
-    id: int
+    id: str
     name: str
     discriminator: str
     nickname: str
@@ -130,15 +175,15 @@ class Reaction(BaseModel):
 
 
 class Message(BaseModel):
-    id: int
-    channel_id: int
-    author_id: int
+    id: str
+    channel_id: str
+    author_id: str
     type: str
     timestamp: datetime
     timestamp_edited: datetime | None
     is_pinned: bool
     content: str
-    reference_message: int | None
+    reference_message: str | None
     embeds: List[Embed]
     mentioned_users: List[int]
     reactions: List[Reaction]
@@ -156,7 +201,7 @@ def get_channel_by_id(channel_id: int):
     cur = discord_database.cursor()
     cur.execute("SELECT * FROM channels WHERE id = %s", (channel_id,))
     result = cur.fetchall()
-    if result is None:
+    if result is None or len(result) == 0:
         return JSONResponse(status_code=404, content={"message": "Channel not found"})
     else:
         return parse_channel(result[0])
@@ -196,6 +241,19 @@ def get_emoji_by_id(emoji_id):
         return JSONResponse(status_code=404, content={"message": "Emoji not found"})
     else:
         return parse_emoji(result[0])
+
+
+whitelistedChannels = (668731047361511435,
+                       668731263888130058,
+                       668731285316960276,
+                       668731685139120129,
+                       668731740981821440,
+                       668731818802937856,
+                       668755221778006016,
+                       845917318738477086,
+                       922811489469988904,
+                       933553404112957500,
+                       948321518834831390)
 
 
 @router.get("/messages", response_model=List[Message])
@@ -252,6 +310,8 @@ def get_messages(
 
     if content != "":
         conditions.append(("ts @@ phraseto_tsquery('english', %s)", content))
+
+    conditions.append(("channel_id in %s", whitelistedChannels))
 
     statements = " and ".join(map(lambda x: x[0], conditions))
     values = list(map(lambda x: x[1], conditions))

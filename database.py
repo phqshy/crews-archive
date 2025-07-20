@@ -10,7 +10,6 @@ with open(postgres_password_file) as f:
 rmb_database_name = os.environ['RMB_DATABASE']
 discord_database_name = os.environ['DISCORD_DATABASE']
 
-
 rmb_database = psycopg2.connect(
     f"host={postgres_url} dbname={rmb_database_name} user={postgres_username} password={postgres_password}")
 
