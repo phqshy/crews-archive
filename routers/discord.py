@@ -15,8 +15,8 @@ router = APIRouter(
 
 def parse_channel(channel_tuple):
     return {
-        'id': channel_tuple[4],
-        'category_id': channel_tuple[1],
+        'id': str(channel_tuple[4]),
+        'category_id': str(channel_tuple[1]),
         'category': channel_tuple[2],
         'name': channel_tuple[0],
         'topic': channel_tuple[5],
@@ -38,7 +38,7 @@ def parse_channel(channel_tuple):
 
 def parse_user(user_tuple):
     return {
-        'id': user_tuple[4],
+        'id': str(user_tuple[4]),
         'name': user_tuple[5],
         'discriminator': user_tuple[2],
         'nickname': user_tuple[0],
@@ -91,15 +91,15 @@ def parse_message(message_tuple):
     print(message_tuple)
 
     return {
-        'id': message_tuple[4],
-        'channel_id': message_tuple[6],
-        'author_id': message_tuple[7],
+        'id': str(message_tuple[4]),
+        'channel_id': str(message_tuple[6]),
+        'author_id': str(message_tuple[7]),
         'type': message_tuple[0],
         'timestamp': message_tuple[5],
         'timestamp_edited': message_tuple[2],
         'is_pinned': message_tuple[3],
         'content': message_tuple[10],
-        'reference_message': message_tuple[9],
+        'reference_message': str(message_tuple[9]),
         'embeds': message_tuple[8][0] if message_tuple[8] is not None else [],
         # 'ts': message_tuple[1],
         'mentioned_users': message_tuple[11] if message_tuple[11][0] is not None else [],
