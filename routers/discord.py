@@ -113,10 +113,10 @@ class ErrorMessage(BaseModel):
 
 class Channel(BaseModel):
     id: str
-    category_id: str | None
-    category: str | None
+    category_id: str | None = None
+    category: str | None = None
     name: str
-    topic: str | None
+    topic: str | None = None
     type: str
 
 
@@ -138,8 +138,8 @@ class Emoji(BaseModel):
 
 class EmbedAuthor(BaseModel):
     name: str
-    url: str | None
-    iconUrl: str | None
+    url: str | None = None
+    iconUrl: str | None = None
 
 
 class EmbedMedia(BaseModel):
@@ -157,14 +157,14 @@ class EmbedField(BaseModel):
 class Embed(BaseModel):
     title: str
     url: str
-    timestamp: datetime | None
+    timestamp: datetime | None = None
     description: str
     color: str | None = None
     author: EmbedAuthor | None = None
     thumbnail: EmbedMedia | None = None
     video: EmbedMedia | None = None
-    images: List[EmbedMedia]
-    fields: List[EmbedField]
+    images: List[EmbedMedia] = []
+    fields: List[EmbedField] = []
 
 
 class Reaction(BaseModel):
@@ -180,10 +180,10 @@ class Message(BaseModel):
     author_id: str
     type: str
     timestamp: datetime
-    timestamp_edited: datetime | None
+    timestamp_edited: datetime | None = None
     is_pinned: bool
     content: str
-    reference_message: str | None
+    reference_message: str | None = None
     embeds: List[Embed]
     mentioned_users: List[int]
     reactions: List[Reaction]
