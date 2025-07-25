@@ -88,7 +88,15 @@ def parse_emoji(emoji_tuple):
 
 
 def parse_message(message_tuple):
-    print(message_tuple)
+    if message_tuple[11] is None or message_tuple[11][0] is None:
+        mentioned_users = []
+    else:
+        mentioned_users = message_tuple[11]
+
+    if message_tuple[12] is None or message_tuple[12][0]['reaction_id'] is None:
+        reactions = []
+    else:
+        reactions = message_tuple[12]
 
     return {
         'id': str(message_tuple[4]),
@@ -102,8 +110,8 @@ def parse_message(message_tuple):
         'reference_message': str(message_tuple[9]),
         'embeds': message_tuple[8][0] if message_tuple[8] is not None else [],
         # 'ts': message_tuple[1],
-        'mentioned_users': message_tuple[11] if message_tuple[11][0] is not None else [],
-        'reactions': message_tuple[12] if message_tuple[12][0]['reaction_id'] is not None else []
+        'mentioned_users': mentioned_users,
+        'reactions': reactions
     }
 
 
