@@ -197,8 +197,8 @@ class Message(BaseModel):
     content: str
     reference_message: str | None = None
     embeds: List[Embed]
-    mentioned_users: List[str]
-    reactions: List[Reaction]
+    mentioned_users: List[str] | None
+    reactions: List[Reaction] | None
 
 
 @router.get("/channels", response_model=List[Channel])
