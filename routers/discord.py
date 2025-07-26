@@ -67,6 +67,10 @@ def parse_emoji(emoji_tuple):
         'image_url': emoji_tuple[0],
     }
 
+def stringify_reactions(reaction):
+    users = reaction['users']
+    users = list(map(lambda x: str(x), users))
+    reaction['users'] = users
 
 # DEVELOPMENT
 """def parse_message(message_tuple):
@@ -91,12 +95,12 @@ def parse_message(message_tuple):
     if message_tuple[11] is None or message_tuple[11][0] is None:
         mentioned_users = []
     else:
-        mentioned_users = message_tuple[11]
+        mentioned_users = list(map(lambda x: str(x), message_tuple[11]))
 
-    if message_tuple[12] is None or message_tuple[12][0]['reaction_id'] is None:
+    if message_tuple[12] is None or message_tuple[12][0]['reaction_id'] is None or message_tuple[12][0]['count'] == 0:
         reactions = []
     else:
-        reactions = message_tuple[12]
+        reactions = list(map(lambda x: stringify_reactions(x), message_tuple[12]))
 
     return {
         'id': str(message_tuple[4]),
@@ -179,7 +183,7 @@ class Reaction(BaseModel):
     reaction_id: int
     emoji_id: int
     count: int
-    users: List[int]
+    users: List[str]
 
 
 class Message(BaseModel):
@@ -193,7 +197,7 @@ class Message(BaseModel):
     content: str
     reference_message: str | None = None
     embeds: List[Embed]
-    mentioned_users: List[int]
+    mentioned_users: List[str]
     reactions: List[Reaction]
 
 
