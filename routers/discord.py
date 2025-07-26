@@ -12,7 +12,6 @@ router = APIRouter(
     tags=["discord"]
 )
 
-
 def parse_channel(channel_tuple):
     return {
         'id': str(channel_tuple[4]),
@@ -67,13 +66,36 @@ def parse_emoji(emoji_tuple):
         'image_url': emoji_tuple[0],
     }
 
+
+# DEVELOPMENT
+"""def parse_emoji(emoji_tuple):
+    return {
+        'id': emoji_tuple[0],
+        'name': emoji_tuple[1],
+        'code': emoji_tuple[2],
+        'image_url': emoji_tuple[3],
+    }"""
+
+
 def stringify_reactions(reaction):
     users = reaction['users']
     users = list(map(lambda x: str(x), users))
     reaction['users'] = users
+    return reaction
+
 
 # DEVELOPMENT
 """def parse_message(message_tuple):
+    if message_tuple[11] is None or message_tuple[11][0] is None:
+        mentioned_users = []
+    else:
+        mentioned_users = list(map(lambda x: str(x), message_tuple[11]))
+
+    if message_tuple[12] is None or message_tuple[12][0]['reaction_id'] is None or message_tuple[12][0]['count'] == 0:
+        reactions = []
+    else:
+        reactions = list(map(lambda x: stringify_reactions(x), message_tuple[12]))
+
     return {
         'id': str(message_tuple[0]),
         'channel_id': str(message_tuple[1]),
@@ -86,8 +108,8 @@ def stringify_reactions(reaction):
         'reference_message': str(message_tuple[8]),
         'embeds': message_tuple[9][0] if message_tuple[9] is not None else [],
         # 'ts': message_tuple[10],
-        'mentioned_users': message_tuple[11] if message_tuple[11][0] is not None else [],
-        'reactions': message_tuple[12] if message_tuple[12][0]['reaction_id'] is not None else []
+        'mentioned_users': mentioned_users,
+        'reactions': reactions
     }"""
 
 
